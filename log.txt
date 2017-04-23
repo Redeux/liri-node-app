@@ -1,0 +1,8 @@
+1492906366358 User Input - {"command":"--h","arguements":[]}
+1492906366373 Error: Invalid Input
+1492906366373 Displaying help ...
+1492906366373 ["Usage: node liri.js [option] [arguments]","\n","Options:"," my-tweets             Shows last 20 tweets and when they were created"," spotify-this-song     Shows information about the song"," movie-this            Shows infotmation about the movie"," do-what-it-says       Takes text inside of random.txt and then use it to call one of LIRI's commands"]
+1492906564326 Error: Invalid Input
+1492906564326 User Input - {"command":"--h","arguement":"super why me"}
+1492906564329 Displaying help ...
+1492906564338 ["Usage: node liri.js [option] [arguments]","\n","Options:"," my-tweets             Shows last 20 tweets and when they were created"," spotify-this-song     Shows information about the song"," movie-this            Shows infotmation about the movie"," do-what-it-says       Takes text inside of random.txt and then use it to call one of LIRI's commands"]
