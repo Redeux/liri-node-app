@@ -2,6 +2,7 @@
 //Define Variables
 let spotify = require('spotify');
 let twitter = require('twitter');
+let keys = require('./keys.js');
 let request = require('request');
 let inquirer = require("inquirer");
 let fs = require('fs');
@@ -24,17 +25,26 @@ if (process.argv.length > 2) {
 //Check user command and perform appropriate task
 switch (userInput.command) {
     case ('my-tweets'):
+        //myTweets(onSuccess, onFailure)
+        myTweets((tweets) => {
+            if (tweets.length >= 20) {
+                //Display the last 20 tweets unless there are less than 20, then display them all
+                for (let i = 0; i <= 20; i++) {
+                    console.log(tweets[i].text + ' - ' + tweets[i].created_at);
+                }
+            } else {
+                for (let i = 0; i < tweets.length; i++) {
+                    console.log(tweets[i].text + ' - ' + tweets[i].created_at);
+                }
+            }
+        }, (error) => {
+            displayError();
+        });
         break;
     case ('spotify-this-song'):
-        /* 
-Artist(s)
-The song's name
-A preview link of the song from Spotify
-The album that the song is from
-    */
         //SpotifyThisSong(song, onSuccess, onFailure)
         SpotifyThisSong(userInput.arguement, (data) => {
-        	// console.log(JSON.stringify(data, null, 2));
+            // console.log(JSON.stringify(data, null, 2));
             console.log('Artist:  ' + data.tracks.items[0].artists[0].name);
             console.log('Album:   ' + data.tracks.items[0].album.name);
             console.log('Song:    ' + data.tracks.items[0].name);
@@ -43,11 +53,9 @@ The album that the song is from
             if (error === 'No results found') {
                 console.log(error + '. Check your spelling and try again.');
             } else {
-                console.log('Something went wrong.  Please try again or check the logs for more information');
+                displayError();
             }
-
         });
-
         break;
     case ('movie-this'):
         //movieThis(title, onSuccess, onFailure)
@@ -64,7 +72,7 @@ The album that the song is from
             if (error === 'Movie not found') {
                 console.log(error + '. Check your spelling and try again.');
             } else {
-                console.log('Something went wrong.  Please try again or check the logs for more information');
+                displayError();
             }
         });
         break;
@@ -85,8 +93,9 @@ function displayHelp() {
     writeLog('Displaying help ...');
     //Displays the valid commaands and what they do
     let helpText = [
+        '',
         'Usage: node liri.js [command] [arguments]',
-        '\n',
+        '',
         'Commands:',
         ' my-tweets             Shows last 20 tweets and when they were created',
         ' spotify-this-song     Shows information about the song',
@@ -99,7 +108,29 @@ function displayHelp() {
     writeLog(JSON.stringify(helpText));
 }
 
-function myTweets() {
+function displayError() {
+    console.log('Something went wrong.  Please try again or check the logs for more information');
+}
+
+function myTweets(onSuccess, onFailure) {
+    writeLog('Searching for tweets ...');
+    let client = new twitter({
+        consumer_key: keys.twitterKeys.consumer_key,
+        consumer_secret: keys.twitterKeys.consumer_secret,
+        access_token_key: keys.twitterKeys.access_token_key,
+        access_token_secret: keys.twitterKeys.access_token_secret
+    });
+
+    let params = { screen_name: 'DumDumDummyUser' };
+    client.get('statuses/user_timeline', params, function(error, tweets, response) {
+        if (!error) {
+            writeLog(JSON.stringify(tweets));
+            return onSuccess(tweets);
+        } else {
+            writeLog(JSON.stringify(error));
+            return onFailure(error);
+        }
+    });
 
 }
 
@@ -119,7 +150,7 @@ function SpotifyThisSong(song, onSuccess, onFailure) {
                     albumn: data.tracks.items[0].artist,
                     artist: data.tracks.items[0].artist,
                 }
-
+                return onSuccess(data);
             } else {
                 //         	    {
                 // 	type: 'list',
