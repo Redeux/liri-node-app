@@ -3,6 +3,7 @@
 let spotify = require('spotify');
 let twitter = require('twitter');
 let request = require('request');
+let inquirer = require("inquirer");
 let fs = require('fs');
 let userInput = {
     command: '',
@@ -33,7 +34,11 @@ The album that the song is from
     */
         //SpotifyThisSong(song, onSuccess, onFailure)
         SpotifyThisSong(userInput.arguement, (data) => {
-            console.log(JSON.stringify(data));
+        	// console.log(JSON.stringify(data, null, 2));
+            console.log('Artist:  ' + data.tracks.items[0].artists[0].name);
+            console.log('Album:   ' + data.tracks.items[0].album.name);
+            console.log('Song:    ' + data.tracks.items[0].name);
+            console.log('Preview: ' + data.tracks.items[0].preview_url);
         }, (error) => {
             if (error === 'No results found') {
                 console.log(error + '. Check your spelling and try again.');
@@ -108,9 +113,23 @@ function SpotifyThisSong(song, onSuccess, onFailure) {
             return onFailure('No results found');
         } else {
             writeLog('Success: ' + JSON.stringify(data))
-            return onSuccess(data);
-        }
+            if (data.tracks.items.length === 1) {
+                let result = {
+                    artist: data.tracks.items[0].artist,
+                    albumn: data.tracks.items[0].artist,
+                    artist: data.tracks.items[0].artist,
+                }
 
+            } else {
+                //         	    {
+                // 	type: 'list',
+                // 	message: 'Gender',
+                // 	choices: ['Male', 'Female'],
+                // 	name: 'gender'
+                // },
+                return onSuccess(data);
+            }
+        }
     });
 }
 
