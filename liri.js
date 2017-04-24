@@ -1,16 +1,16 @@
 'use strict';
 //Define Variables
-let spotify = require('spotify');
-let twitter = require('twitter');
-let keys = require('./keys.js');
-let request = require('request');
-let fs = require('fs');
-let userInput = {
+const spotify = require('spotify');
+const twitter = require('twitter');
+const keys = require('./keys.js');
+const request = require('request');
+const fs = require('fs');
+const userInput = {
     command: '',
     arguement: ''
 };
 
-//Main Logic
+//Begin Main Logic
 //Process command line arguments 
 if (process.argv.length > 2) {
     let rawInputs = [];
@@ -48,7 +48,7 @@ function mainProcess(command, arg) {
         case ('spotify-this-song'):
             //SpotifyThisSong(song, onSuccess, onFailure)
             SpotifyThisSong(arg, (data) => {
-                console.log('Artist:  ' + data.tracks.items[0].artists[0].name);
+                console.log('Artist:  ' + data.tracks.items[0].artists.map((element) => {return element.name}).join(', '));         
                 console.log('Album:   ' + data.tracks.items[0].album.name);
                 console.log('Song:    ' + data.tracks.items[0].name);
                 console.log('Preview: ' + data.tracks.items[0].preview_url);
@@ -92,13 +92,14 @@ function mainProcess(command, arg) {
             break;
     }
 }
+//End Main Logic
 
 //Supporting Functions
 function displayHelp() {
     //Displays the valid commands and what they do
     writeLog('Displaying help ...');
 
-    let helpText = [
+    const helpText = [
         '',
         'Usage: node liri.js [command] [arguments]',
         '',
