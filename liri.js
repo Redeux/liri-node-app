@@ -11,7 +11,7 @@ let userInput = {
 };
 
 //Main Logic
-//Process command line arguements 
+//Process command line arguments 
 if (process.argv.length > 2) {
     let rawInputs = [];
     for (let i = 2; i < process.argv.length; i++) {
@@ -95,7 +95,7 @@ function mainProcess(command, arg) {
 
 //Supporting Functions
 function displayHelp() {
-    //Displays the valid commaands and what they do
+    //Displays the valid commands and what they do
     writeLog('Displaying help ...');
 
     let helpText = [
@@ -105,7 +105,7 @@ function displayHelp() {
         'Commands:',
         ' my-tweets             Shows last 20 tweets and when they were created',
         ' spotify-this-song     Shows information about the song',
-        ' movie-this            Shows infotmation about the movie',
+        ' movie-this            Shows information about the movie',
         ' do-what-it-says       Takes text inside of random.txt and then use it to call one of LIRI\'s commands'
     ]
 
@@ -146,7 +146,7 @@ function myTweets(userName, onSuccess, onFailure) {
 }
 
 function SpotifyThisSong(song, onSuccess, onFailure) {
-    //Looks up a Spotify song and retuns it if found.  If no song is supplied returns Ace of Base - The Sign
+    //Looks up a Spotify song and returns it if found.  If no song is supplied returns Ace of Base - The Sign
     writeLog('Searching for song ' + song + ' ...');
 
     if (song === '') {
