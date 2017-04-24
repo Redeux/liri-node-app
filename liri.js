@@ -28,7 +28,9 @@ mainProcess(userInput.command, userInput.arguement);
 function mainProcess(command, arg) {
     //Check user command and perform appropriate task
     switch (command) {
-        case ('my-tweets'):
+    	case '-t':
+    	case '--tweets':
+        case 'my-tweets':
             //myTweets(userName, onSuccess, onFailure)
             myTweets('DumDumDummyUser', (tweets) => {
                 if (tweets.length >= 20) {
@@ -45,7 +47,9 @@ function mainProcess(command, arg) {
                 displayError();
             });
             break;
-        case ('spotify-this-song'):
+        case '-s':
+        case '--spotify':
+        case 'spotify-this-song':
             //SpotifyThisSong(song, onSuccess, onFailure)
             SpotifyThisSong(arg, (data) => {
                 console.log('Artist:  ' + data.tracks.items[0].artists.map((element) => {return element.name}).join(', '));         
@@ -60,7 +64,9 @@ function mainProcess(command, arg) {
                 }
             });
             break;
-        case ('movie-this'):
+        case '-m':
+        case '--movie':
+        case 'movie-this':
             //movieThis(title, onSuccess, onFailure)
             movieThis(arg, (movie) => {
                 console.log('Title:               ' + movie.Title);
@@ -79,10 +85,13 @@ function mainProcess(command, arg) {
                 }
             });
             break;
-        case ('do-what-it-says'):
+        case '-r':
+        case '--random':
+        case 'do-what-it-says':
             doWhatItSays();
             break;
-        case ('--help'):
+        case '-h':
+        case '--help':
             displayHelp();
             break;
         default:
@@ -104,10 +113,10 @@ function displayHelp() {
         'Usage: node liri.js [command] [arguments]',
         '',
         'Commands:',
-        ' my-tweets             Shows last 20 tweets and when they were created',
-        ' spotify-this-song     Shows information about the song',
-        ' movie-this            Shows information about the movie',
-        ' do-what-it-says       Takes text inside of random.txt and then use it to call one of LIRI\'s commands'
+        ' -t, --tweets, my-tweets             Shows last 20 tweets and when they were created',
+        ' -s, --spotify, spotify-this-song    Shows information about the song',
+        ' -m, --movie, movie-this             Shows information about the movie',
+        ' -r, --random, do-what-it-says       Takes text inside of random.txt and then use it to call one of LIRI\'s commands'
     ]
 
     helpText.map(function(v) {
