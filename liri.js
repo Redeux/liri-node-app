@@ -4,7 +4,6 @@ let spotify = require('spotify');
 let twitter = require('twitter');
 let keys = require('./keys.js');
 let request = require('request');
-let inquirer = require("inquirer");
 let fs = require('fs');
 let userInput = {
     command: '',
