@@ -52,7 +52,7 @@ function mainProcess(command, arg) {
         case 'spotify-this-song':
             //SpotifyThisSong(song, onSuccess, onFailure)
             SpotifyThisSong(arg, (data) => {
-                console.log('Artist:  ' + data.tracks.items[0].artists.map((element) => {return element.name}).join(', '));         
+                console.log('Artist:  ' + data.tracks.items[0].artists.map(element => element.name).join(', '));         
                 console.log('Album:   ' + data.tracks.items[0].album.name);
                 console.log('Song:    ' + data.tracks.items[0].name);
                 console.log('Preview: ' + data.tracks.items[0].preview_url);
