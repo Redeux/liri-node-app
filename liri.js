@@ -28,11 +28,11 @@ mainProcess(userInput.command, userInput.arguement);
 function mainProcess(command, arg) {
     //Check user command and perform appropriate task
     switch (command) {
-    	case '-t':
-    	case '--tweets':
+        case '-t':
+        case '--tweets':
         case 'my-tweets':
             //myTweets(userName, onSuccess, onFailure)
-            myTweets('DumDumDummyUser', (tweets) => {
+            myTweets('DumDumDummyUser', tweets => {
                 if (tweets.length >= 20) {
                     //Display the last 20 tweets unless there are less than 20, then display them all
                     for (let i = 0; i < 20; i++) {
@@ -43,20 +43,18 @@ function mainProcess(command, arg) {
                         console.log(tweets[i].text + ' - ' + tweets[i].created_at);
                     }
                 }
-            }, (error) => {
-                displayError();
-            });
+            }, error => displayError());
             break;
         case '-s':
         case '--spotify':
         case 'spotify-this-song':
             //SpotifyThisSong(song, onSuccess, onFailure)
-            SpotifyThisSong(arg, (data) => {
-                console.log('Artist:  ' + data.tracks.items[0].artists.map(element => element.name).join(', '));         
+            SpotifyThisSong(arg, data => {
+                console.log('Artist:  ' + data.tracks.items[0].artists.map(element => element.name).join(', '));
                 console.log('Album:   ' + data.tracks.items[0].album.name);
                 console.log('Song:    ' + data.tracks.items[0].name);
                 console.log('Preview: ' + data.tracks.items[0].preview_url);
-            }, (error) => {
+            }, error => {
                 if (error === 'No results found') {
                     console.log(error + '. Check your spelling and try again.');
                 } else {
@@ -68,7 +66,7 @@ function mainProcess(command, arg) {
         case '--movie':
         case 'movie-this':
             //movieThis(title, onSuccess, onFailure)
-            movieThis(arg, (movie) => {
+            movieThis(arg, movie => {
                 console.log('Title:               ' + movie.Title);
                 console.log('Year Released:       ' + movie.Year);
                 console.log('IMDB Rating:         ' + movie.imdbRating);
@@ -77,7 +75,7 @@ function mainProcess(command, arg) {
                 console.log('Plot:                ' + movie.Plot);
                 console.log('Actors:              ' + movie.Actors);
                 console.log('Rotten Tomatoes URL: ' + movie.tomatoURL);
-            }, (error) => {
+            }, error => {
                 if (error === 'Movie not found') {
                     console.log(error + '. Check your spelling and try again.');
                 } else {
@@ -119,9 +117,7 @@ function displayHelp() {
         ' -r, --random, do-what-it-says       Takes text inside of random.txt and then use it to call one of LIRI\'s commands'
     ]
 
-    helpText.map(function(v) {
-        console.log(v);
-    })
+    helpText.map(v => console.log(v));
 
     writeLog(JSON.stringify(helpText));
 }
@@ -135,14 +131,14 @@ function myTweets(userName, onSuccess, onFailure) {
     //Queries a user and returns an array of their tweets
     writeLog('Searching for tweets ...');
 
-    let client = new twitter({
+    const client = new twitter({
         consumer_key: keys.twitterKeys.consumer_key,
         consumer_secret: keys.twitterKeys.consumer_secret,
         access_token_key: keys.twitterKeys.access_token_key,
         access_token_secret: keys.twitterKeys.access_token_secret
     });
 
-    let params = { screen_name: userName };
+    const params = { screen_name: userName };
 
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (!error) {
@@ -183,12 +179,12 @@ function movieThis(title, onSuccess, onFailure) {
         title = 'Mr. Nobody';
     }
 
-    let omdbURL = 'http://www.omdbapi.com/?t=' + title + '&type=movie&plot=short&tomatoes=true&r=json';
+    const omdbURL = 'http://www.omdbapi.com/?t=' + title + '&type=movie&plot=short&tomatoes=true&r=json';
 
     writeLog('Searching for movie at ' + omdbURL + ' ...');
 
     request(omdbURL, function(error, response, bodyString) {
-        let body = JSON.parse(bodyString);
+        const body = JSON.parse(bodyString);
         if (!error && response.statusCode === 200) {
             writeLog(JSON.stringify(response));
             if (body.Response === 'True') {
@@ -205,13 +201,13 @@ function movieThis(title, onSuccess, onFailure) {
 
 function doWhatItSays() {
     //Takes the command in random.txt and executes it
-    let fileName = './random.txt';
+    const fileName = './random.txt';
 
     writeLog('Executing doWhatItSays on ' + fileName + ' ...');
 
     fs.readFile(fileName, 'utf8', (err, data) => {
         if (err) throw err;
-        let values = data.split(',');
+        const values = data.split(',');
         writeLog(fileName + ' Input - ' + JSON.stringify(values));
         mainProcess(values[0], values[1]);
     });
@@ -219,8 +215,8 @@ function doWhatItSays() {
 
 function writeLog(msg) {
     //Writes msg to log file with timestamp
-    let logFile = './log.txt';
-    fs.appendFile(logFile, Date.now() + ' ' + msg + '\n', (err) => {
-        if (err) throw err;
+    const logFile = './log.txt';
+    fs.appendFile(logFile, Date.now() + ' ' + msg + '\n', err => {
+        if (err) throw err
     });
 }
